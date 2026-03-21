@@ -11,19 +11,27 @@ public class ScriptInterpreter {
 
     public boolean execute(List<ScriptOp> script) {
 
-        for (ScriptOp op : script) {
-            op.execute(stack);
+        try {
+            for (ScriptOp op : script) {
 
-            if (trace) {
-                printStack();
+                op.execute(stack);
+
+                if (trace) {
+                    System.out.println("Ejecutando: " + op.getClass().getSimpleName());
+                    printStack();
+                }
             }
-        }
 
-        if (stack.isEmpty()) return false;
+            if (stack.isEmpty()) return false;
+
             byte[] top = stack.peek();
             return top.length > 0 && top[0] != 0;
-    }
 
+        } catch (Exception e) {
+            System.out.println("Error durante ejecución: " + e.getMessage());
+            return false;
+        }
+    }
 
     private void printStack() {
         System.out.println("STACK:");
